@@ -1,0 +1,26 @@
+# Railway deployment config for Hunter 2.
+#
+# Two services share this image:
+#   1. "scheduler" — APScheduler loop firing passive scans (this start command)
+#   2. "dashboard" — read-only FastAPI, started with `python -m src.main dashboard --host 0.0.0.0 --port 8000`
+#
+# Set the `startCommand` override on the dashboard service in the Railway UI.
+# Environment variables set on each service:
+#   SLACK_WEBHOOK_URL
+#   GITHUB_TOKEN          (used by gau)
+#   RUNPOD_POD_IP         (updated whenever the RunPod pod restarts)
+#   LLM_BASE_URL          (http://${RUNPOD_POD_IP}:8090/v1)
+
+[build]
+builder = "dockerfile"
+dockerfilePath = "docker/Dockerfile"
+
+[deploy]
+startCommand = "python -m src.main scheduler"
+healthcheckPath = "/health"
+healthcheckTimeout = 30
+restartPolicyType = "on_failure"
+restartPolicyMaxRetries = 5
+
+[[volumes]]
+mountPath = "/app/data"

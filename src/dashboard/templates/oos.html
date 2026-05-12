@@ -1,0 +1,28 @@
+{% extends "_base.html" %}
+{% block title %}OOS assets — Hunter 2{% endblock %}
+{% block content %}
+<h1>Out-of-scope assets</h1>
+<form method="get">
+  program:
+  <select name="program" onchange="this.form.submit()">
+    {% for p in programs %}<option value="{{ p }}" {% if p == program %}selected{% endif %}>{{ p }}</option>{% endfor %}
+  </select>
+</form>
+<p>{{ rows|length }} OOS subdomain(s) tagged for <code>{{ program }}</code>.
+   These are stored but never active-scanned.</p>
+<table>
+  <thead><tr>
+    <th>domain</th><th>reason</th><th>first seen</th><th>last seen</th>
+  </tr></thead>
+  <tbody>
+  {% for r in rows %}
+  <tr>
+    <td><code>{{ r.domain }}</code></td>
+    <td>{{ r.oos_reason or "-" }}</td>
+    <td>{{ r.first_seen.strftime("%Y-%m-%d %H:%M") if r.first_seen else "-" }}</td>
+    <td>{{ r.last_seen.strftime("%Y-%m-%d %H:%M") if r.last_seen else "-" }}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

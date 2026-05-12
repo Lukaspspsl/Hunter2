@@ -1,0 +1,72 @@
+{% extends "_base.html" %}
+{% block title %}Timeline — Hunter 2{% endblock %}
+{% block content %}
+<h1>Execution timeline</h1>
+<form id="filters" onsubmit="return false;">
+  program:
+  <select id="program">
+    <option value="">(all)</option>
+    {% for p in programs %}<option value="{{ p }}" {% if p == program %}selected{% endif %}>{{ p }}</option>{% endfor %}
+  </select>
+  limit: <input id="limit" type="number" min="10" max="500" value="100">
+  <span id="status" style="color:#8b949e; margin-left:12px;"></span>
+</form>
+<table>
+  <thead><tr>
+    <th>started</th><th>tool</th><th>target</th><th>program</th>
+    <th>status</th><th>ms</th><th>via</th><th>summary</th>
+  </tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<script>
+function td(text, opts) {
+  const el = document.createElement('td');
+  if (opts && opts.cls) el.className = opts.cls;
+  if (opts && opts.code) {
+    const c = document.createElement('code');
+    c.textContent = text == null ? '' : String(text);
+    el.appendChild(c);
+  } else if (opts && opts.pill) {
+    const s = document.createElement('span');
+    s.className = 'pill';
+    s.textContent = text == null ? '-' : String(text);
+    el.appendChild(s);
+  } else {
+    el.textContent = text == null ? '-' : String(text);
+  }
+  return el;
+}
+async function refresh() {
+  const program = document.getElementById('program').value;
+  const limit = document.getElementById('limit').value;
+  const status = document.getElementById('status');
+  const qs = new URLSearchParams({ limit }); if (program) qs.set('program', program);
+  status.textContent = 'updating…';
+  try {
+    const r = await fetch('/api/timeline?' + qs);
+    const data = await r.json();
+    const body = document.getElementById('rows');
+    body.replaceChildren();
+    for (const e of data) {
+      const tr = document.createElement('tr');
+      tr.appendChild(td((e.started_at || '').replace('T', ' ').slice(0, 19)));
+      tr.appendChild(td(e.tool, { code: true }));
+      tr.appendChild(td(e.target));
+      tr.appendChild(td(e.program));
+      tr.appendChild(td(e.status, { cls: 'status-' + e.status }));
+      tr.appendChild(td(e.duration_ms));
+      tr.appendChild(td(e.triggered_by, { pill: true }));
+      tr.appendChild(td(e.summary));
+      body.appendChild(tr);
+    }
+    status.textContent = data.length + ' rows · last update ' + new Date().toLocaleTimeString();
+  } catch (e) {
+    status.textContent = 'error: ' + e;
+  }
+}
+document.getElementById('program').addEventListener('change', refresh);
+document.getElementById('limit').addEventListener('change', refresh);
+refresh();
+setInterval(refresh, 5000);
+</script>
+{% endblock %}

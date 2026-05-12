@@ -1,0 +1,14 @@
+{% extends "_base.html" %}
+{% block title %}Hunter 2 — Overview{% endblock %}
+{% block content %}
+<h1>Hunter 2</h1>
+<p>Read-only dashboard. Writes happen through the orchestrator, REPL, or scheduler.</p>
+<ul>
+  <li><a href="/timeline">Execution timeline</a> — every tool run, OOS block, scope check.</li>
+  <li><a href="/programs">Programs</a> — configured scope blocks and aggressiveness ceilings.</li>
+  <li><a href="/oos-assets">OOS assets</a> — discovered hosts the scope engine tagged out of scope.</li>
+</ul>
+<p>Programs configured: <code>{{ cfg.programs|length }}</code> &middot;
+   Tools: <code>{{ cfg.tools|length }}</code> &middot;
+   LLM: <code>{{ cfg.llm.model }}</code></p>
+{% endblock %}

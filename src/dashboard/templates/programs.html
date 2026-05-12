@@ -1,0 +1,23 @@
+{% extends "_base.html" %}
+{% block title %}Programs — Hunter 2{% endblock %}
+{% block content %}
+<h1>Programs</h1>
+<table>
+  <thead><tr>
+    <th>name</th><th>platform</th><th>ceiling</th>
+    <th>in_scope</th><th>out_of_scope</th><th>cron</th>
+  </tr></thead>
+  <tbody>
+  {% for name, p in programs.items() %}
+  <tr>
+    <td><strong>{{ name }}</strong></td>
+    <td>{{ p.platform or "-" }}</td>
+    <td><span class="pill">{{ p.aggressiveness }}</span></td>
+    <td>{% for s in p.in_scope %}<div><code>{{ s }}</code></div>{% endfor %}</td>
+    <td>{% for s in p.out_of_scope %}<div><code>{{ s }}</code></div>{% endfor %}</td>
+    <td>{% if p.schedule.enabled %}<code>{{ p.schedule.cron }}</code>{% else %}-{% endif %}</td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

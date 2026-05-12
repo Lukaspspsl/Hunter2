@@ -1,0 +1,19 @@
+programs:
+  example_vdp:
+    platform: hackerone
+    aggressiveness: passive
+    in_scope:
+      - "*.example.com"
+      - "example.com"
+    out_of_scope:
+      - "careers.example.com"
+      - "*.staging.example.com"
+    rules:
+      - "no automated scanning on prod checkout flow"
+    notify:
+      on_new_subdomain: true
+      on_critical_vuln: true
+      on_scope_violation_attempt: true
+    schedule:
+      cron: "0 6 * * *"
+      enabled: false

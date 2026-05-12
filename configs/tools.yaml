@@ -1,0 +1,159 @@
+tools:
+  subfinder:
+    binary: subfinder
+    description: "Passive subdomain enumeration using multiple sources"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 300
+    args:
+      threads: 10
+      sources: [certspotter, hackertarget, threatcrowd, virustotal]
+
+  crtsh:
+    binary: curl
+    description: "Certificate transparency log query (crt.sh)"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 60
+
+  dnsx:
+    binary: dnsx
+    description: "DNS resolution and validation of discovered subdomains"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 120
+    args:
+      threads: 50
+      retry: 2
+
+  httpx:
+    binary: httpx
+    description: "HTTP probing — alive check, status codes, titles, TLS info, redirects"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 30
+    args:
+      threads: 50
+      follow_redirects: true
+      tech_detect: true
+
+  gau:
+    binary: gau
+    description: "Fetch historical URLs from Wayback Machine and Common Crawl. Zero target traffic."
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 120
+
+  waybackurls:
+    binary: waybackurls
+    description: "Pull historical URLs from Wayback Machine"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 60
+
+  alterx:
+    binary: alterx
+    description: "Subdomain permutation and alteration from discovered subdomains"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 60
+
+  trufflehog:
+    binary: trufflehog
+    description: "Secret scanning in git repositories"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 300
+
+  gowitness:
+    binary: gowitness
+    description: "Web screenshots for visual recon"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 120
+
+  wappalyzer:
+    binary: wappalyzer
+    description: "Technology fingerprinting via Wappalyzer CLI"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 60
+
+  nmap_quick:
+    binary: nmap
+    description: "Quick port scan — top 1000 ports, service detection"
+    enabled: true
+    min_level: active
+    rate_multiplier: 0.6
+    timeout: 300
+    args:
+      flags: "-sV -sC --top-ports 1000"
+
+  nmap_full:
+    binary: nmap
+    description: "Full port scan — all 65535 ports"
+    enabled: true
+    min_level: aggressive
+    rate_multiplier: 1.5
+    timeout: 600
+    args:
+      flags: "-sV -sC -p-"
+
+  nuclei_focused:
+    binary: nuclei
+    description: "Vulnerability scan — high and critical severity only"
+    enabled: true
+    min_level: active
+    rate_multiplier: 0.6
+    timeout: 600
+    args:
+      severity: [high, critical]
+      tags: [cve, vulnerabilities]
+      rate_limit: 100
+
+  nuclei_full:
+    binary: nuclei
+    description: "Full vulnerability scan — all severities, all template categories"
+    enabled: true
+    min_level: aggressive
+    rate_multiplier: 1.5
+    timeout: 900
+    args:
+      severity: [low, medium, high, critical]
+      rate_limit: 150
+      custom_templates: "./templates/"
+
+  ffuf:
+    binary: ffuf
+    description: "Directory and endpoint bruteforce"
+    enabled: true
+    min_level: aggressive
+    rate_multiplier: 1.5
+    timeout: 300
+    args:
+      wordlist: "/usr/share/wordlists/quick.txt"
+      threads: 40
+      extensions: [php, asp]
+
+  notify:
+    binary: notify
+    description: "Push notifications to Slack on findings"
+    enabled: true
+    min_level: passive
+    rate_multiplier: 1.0
+    timeout: 10
+
+rate_multipliers:
+  passive: 1.0
+  active: 0.6
+  aggressive: 1.5

@@ -1,18 +1,29 @@
-"""Hunter recon and analysis modules."""
+"""Hunter 2 recon and analysis modules.
 
-from .subdomain_enum import SubdomainEnumerator
-from .secret_scanner import SecretScanner
-from .dir_bruteforce import DirectoryBruteforcer
-from .port_scanner import PortScanner
-from .vuln_scanner import VulnerabilityScanner
-from .screenshotter import Screenshotter
+Note: the Hunter 1.0 modules (subdomain_enum, secret_scanner, port_scanner,
+vuln_scanner, dir_bruteforce, screenshotter, crtsh) are ported verbatim and
+will be rewired against the new ToolChecker / ScopeEngine in Phase 4. Until
+then they are imported lazily by callers, not from this package init.
+"""
+
+from .httpx_prober import HttpxProber, HttpxResult
+from .dnsx_resolver import DnsxResolver, DnsxResult
+from .gau_collector import GauCollector, GauResult
+from .alterx_permuter import AlterxPermuter, AlterxResult
+from .tech_detector import TechDetector, TechResult, TechFinding
+from .notifier import Notifier
 
 __all__ = [
-    "SubdomainEnumerator",
-    "SecretScanner",
-    "DirectoryBruteforcer",
-    "PortScanner",
-    "VulnerabilityScanner",
-    "Screenshotter",
+    "HttpxProber",
+    "HttpxResult",
+    "DnsxResolver",
+    "DnsxResult",
+    "GauCollector",
+    "GauResult",
+    "AlterxPermuter",
+    "AlterxResult",
+    "TechDetector",
+    "TechResult",
+    "TechFinding",
+    "Notifier",
 ]
-

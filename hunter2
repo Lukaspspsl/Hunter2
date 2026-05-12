@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# Hunter 2 launcher. Routes to the python module entry.
+cd "$(dirname "$0")"
+if [ -x .venv/bin/python ]; then
+    exec .venv/bin/python -m src.main "$@"
+fi
+exec python3 -m src.main "$@"

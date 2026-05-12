@@ -1,0 +1,15 @@
+.venv
+.git
+.gitignore
+.idea
+.vscode
+.DS_Store
+__pycache__
+*.pyc
+*.pyo
+data/
+*.db
+*.log
+HUNTER2_PLAN.md
+README.md
+.claude
